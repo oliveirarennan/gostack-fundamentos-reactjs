@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import filesize from 'filesize';
-
 import Header from '../../components/Header';
 import FileList from '../../components/FileList';
 import Upload from '../../components/Upload';
@@ -23,19 +22,34 @@ const Import: React.FC = () => {
   const history = useHistory();
 
   async function handleUpload(): Promise<void> {
-    // const data = new FormData();
+    const data = new FormData();
 
-    // TODO
+    if (!uploadedFiles.length) {
+      console.log('Nenhum arquivo enviado');
+      return;
+    }
+
+    uploadedFiles.map(async uploadedFile => {
+      const { file } = uploadedFile;
+      data.append('file', file);
+    });
 
     try {
-      // await api.post('/transactions/import', data);
+      await api.post('transactions/import', data);
     } catch (err) {
-      // console.log(err.response.error);
+      console.log(err.response.error);
     }
+    history.go(0);
   }
 
   function submitFile(files: File[]): void {
-    // TODO
+    const uploadedCSVs = files.map(file => ({
+      file,
+      name: file.name,
+      readableSize: filesize(file.size),
+    }));
+
+    setUploadedFiles([...uploadedCSVs]);
   }
 
   return (
