@@ -29,7 +29,7 @@ const Import: React.FC = () => {
       return;
     }
 
-    uploadedFiles.map(async uploadedFile => {
+    uploadedFiles.map(uploadedFile => {
       const { file } = uploadedFile;
       data.append('file', file);
     });
